@@ -9,10 +9,23 @@ import cors from "cors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { taskSchema, categorySchema, userSchema } from "./schemas.js";
+import rateLimit from "express-rate-limit";
 
 const app: Express = express();
 app.use(express.json());
 app.use(cors());
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: "Zu viele Versuche. Bitte später erneut." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(apiLimiter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Server läuft");
@@ -134,7 +147,7 @@ app.delete("/tasks/:id", requireAuth, async (req: Request, res: Response) => {
   }
 });
 
-app.post("/register", async (req: Request, res: Response) => {
+app.post("/register", authLimiter, async (req: Request, res: Response) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
     console.error(result.error);
@@ -158,7 +171,7 @@ app.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/login", async (req: Request, res: Response) => {
+app.post("/login", authLimiter, async (req: Request, res: Response) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
     console.error(result.error);
