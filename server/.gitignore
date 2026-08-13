@@ -4,3 +4,8 @@ node_modules
 
 /src/generated/prisma
 dist
+
+# AI tools
+.agents/
+.claude/
+.windsurf/
