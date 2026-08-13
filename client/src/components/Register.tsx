@@ -22,27 +22,38 @@ function Register({ onRegistered }: { onRegistered: () => void }) {
   return (
     <>
       <form
+        className="flex flex-col gap-3"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
         <input
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm
+           focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter Email"
         />
         <input
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm
+           focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter Passwort"
         />
-        <button type="submit">Registrieren</button>
+        <button
+          type="submit"
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white
+           hover:bg-blue-700 cursor-pointer"
+        >
+          Registrieren
+        </button>
       </form>
 
-      {fehler && <p>{fehler}</p>}
+      {fehler && <p className="text-sm text-red-600">{fehler}</p>}
     </>
   );
 }
