@@ -13,7 +13,11 @@ import rateLimit from "express-rate-limit";
 
 const app: Express = express();
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
+  }),
+);
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -317,4 +321,7 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-app.listen(3000);
+const port = process.env.PORT ?? 3000;
+app.listen(port, () => {
+  console.log(`Server läuft auf Port ${port}`);
+});
