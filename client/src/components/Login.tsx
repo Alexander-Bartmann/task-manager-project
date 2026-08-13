@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { API_URL } from "../config";
 
 function Login({ onLogin }: { onLogin: (token: string) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

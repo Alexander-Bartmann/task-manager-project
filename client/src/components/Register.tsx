@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { API_URL } from "../config";
 
 function Register({ onRegistered }: { onRegistered: () => void }) {
   const [email, setEmail] = useState("");
@@ -6,7 +7,7 @@ function Register({ onRegistered }: { onRegistered: () => void }) {
   const [fehler, setFehler] = useState("");
 
   const handleSubmit = async () => {
-    const response = await fetch("http://localhost:3000/register", {
+    const response = await fetch(`${API_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
