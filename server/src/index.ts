@@ -62,6 +62,7 @@ app.post("/tasks", requireAuth, async (req: Request, res: Response) => {
     const newTask = await prisma.task.create({
       data: {
         ...result.data,
+        categoryId: result.data.categoryId || null,
         done: false,
         userId: userId,
       },
@@ -118,7 +119,10 @@ app.put("/tasks/:id", requireAuth, async (req: Request, res: Response) => {
     }
     const modifyingTask = await prisma.task.update({
       where: { id, userId },
-      data: result.data,
+      data: {
+        ...result.data,
+        categoryId: result.data.categoryId || null,
+      },
     });
     res.json(modifyingTask);
   } catch (error) {

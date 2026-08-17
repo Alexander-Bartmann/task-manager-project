@@ -7,6 +7,7 @@ const taskSchema = z.object({
   text: z.string(),
   date: z.string(),
   priority: priorities,
+  categoryId: z.string().optional(),
 });
 
 const categorySchema = z.object({
