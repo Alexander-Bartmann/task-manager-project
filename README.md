@@ -2,7 +2,7 @@
 
 Fullstack-Anwendung zur Aufgabenverwaltung mit Benutzerkonten. Jeder Nutzer registriert sich, meldet sich an und verwaltet ausschließlich seine eigenen Tasks und Kategorien — die Zugriffsprüfung erfolgt serverseitig bei jedem Request.
 
-**Live:** https://task-manager-alex.netlify.app
+**Live:** [https://task-manager-alexander-bartmann.de](https://task-manager.alexander-bartmann.de)
 
 > Hinweis: Das Backend läuft auf einem kostenlosen Render-Tarif und schläft nach 15 Minuten Inaktivität ein. Der erste Aufruf kann daher 30–60 Sekunden dauern.
 
