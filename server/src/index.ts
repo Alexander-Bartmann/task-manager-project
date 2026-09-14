@@ -13,11 +13,13 @@ import rateLimit from "express-rate-limit";
 
 const app: Express = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
-  }),
-);
+
+const erlaubt: string[] = [
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter((url): url is string => Boolean(url));
+
+app.use(cors({ origin: erlaubt }));
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -57,7 +59,10 @@ app.post("/tasks", requireAuth, async (req: Request, res: Response) => {
   try {
     const result = taskSchema.safeParse(req.body);
     if (!result.success) {
-      return res.status(400).json({ error: "Ungültige Daten" });
+      return res.status(400).json({
+        error: "Ungültige Daten",
+        details: result.error.issues,
+      });
     }
     const newTask = await prisma.task.create({
       data: {
@@ -111,7 +116,10 @@ app.put("/tasks/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const result = taskSchema.safeParse(req.body);
     if (!result.success) {
-      return res.status(400).json({ error: "Ungültige Daten" });
+      return res.status(400).json({
+        error: "Ungültige Daten",
+        details: result.error.issues,
+      });
     }
     const task = await prisma.task.findUnique({ where: { id, userId } });
     if (!task) {
@@ -158,8 +166,10 @@ app.delete("/tasks/:id", requireAuth, async (req: Request, res: Response) => {
 app.post("/register", authLimiter, async (req: Request, res: Response) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
-    console.error(result.error);
-    return res.status(400).json({ error: "Ungültige Daten" });
+    return res.status(400).json({
+      error: "Ungültige Daten",
+      details: result.error.issues,
+    });
   }
   const { email, password } = result.data;
   try {
@@ -182,8 +192,10 @@ app.post("/register", authLimiter, async (req: Request, res: Response) => {
 app.post("/login", authLimiter, async (req: Request, res: Response) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
-    console.error(result.error);
-    return res.status(400).json({ error: "Ungültige Daten" });
+    return res.status(400).json({
+      error: "Ungültige Daten",
+      details: result.error.issues,
+    });
   }
   const { email, password } = result.data;
   try {
@@ -229,7 +241,10 @@ app.post("/categories", requireAuth, async (req: Request, res: Response) => {
   try {
     const result = categorySchema.safeParse(req.body);
     if (!result.success) {
-      return res.status(400).json({ error: "Ungültige Daten" });
+      return res.status(400).json({
+        error: "Ungültige Daten",
+        details: result.error.issues,
+      });
     }
     const newCategory = await prisma.category.create({
       data: {
@@ -256,7 +271,10 @@ app.put("/categories/:id", requireAuth, async (req: Request, res: Response) => {
   try {
     const result = categorySchema.safeParse(req.body);
     if (!result.success) {
-      return res.status(400).json({ error: "Ungültige Daten" });
+      return res.status(400).json({
+        error: "Ungültige Daten",
+        details: result.error.issues,
+      });
     }
     const category = await prisma.category.findUnique({
       where: { id, userId },
