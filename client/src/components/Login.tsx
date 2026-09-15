@@ -5,15 +5,25 @@ function Login({ onLogin }: { onLogin: (token: string) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
+  try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
+    if (!response.ok) {
+      setFehler("E-Mail oder Passwort falsch");
+      return;
+    }
+
     const savedLogin = await response.json();
     onLogin(savedLogin.token);
-  };
+  } catch {
+    setFehler("Server nicht erreichbar");
+  }
+};
   return (
     <>
       <form
