@@ -3,7 +3,7 @@ import z from "zod";
 const priorities = z.enum(["low", "medium", "high"]);
 
 const taskSchema = z.object({
-  title: z.string(),
+  title: z.string().trim().min(1, "Titel darf nicht leer sein"),
   text: z.string(),
   date: z.string(),
   priority: priorities,
