@@ -167,7 +167,7 @@ app.post("/register", authLimiter, async (req: Request, res: Response) => {
   const result = userSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({
-      error: "Ungültige Daten",
+      error: result.error.issues[0]?.message ?? "Ungültige Daten",
       details: result.error.issues,
     });
   }

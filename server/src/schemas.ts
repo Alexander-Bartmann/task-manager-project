@@ -15,8 +15,8 @@ const categorySchema = z.object({
 });
 
 const userSchema = z.object({
-  password: z.string().min(8),
-  email: z.email(),
+  password: z.string().min(8, "Passwort muss mindestens 8 Zeichen lang sein"),
+  email: z.email("Bitte eine gültige E-Mail-Adresse eingeben"),
 });
 
 export { taskSchema, priorities, categorySchema, userSchema };
