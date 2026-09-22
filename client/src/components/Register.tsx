@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { API_URL } from "../config";
+import { userSchema } from "../schemas";
 
 function Register({ onRegistered }: { onRegistered: () => void }) {
   const [email, setEmail] = useState("");
@@ -7,6 +8,11 @@ function Register({ onRegistered }: { onRegistered: () => void }) {
   const [fehler, setFehler] = useState("");
 
   const handleSubmit = async () => {
+    const result = userSchema.safeParse({ email, password });
+    if (!result.success) {
+      setFehler(result.error.issues[0]?.message ?? "Ungültige Daten");
+      return;
+    }
     const response = await fetch(`${API_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -17,6 +23,7 @@ function Register({ onRegistered }: { onRegistered: () => void }) {
       setFehler(data.error);
       return;
     }
+    setFehler("");
     onRegistered();
   };
   return (
